@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Home from './Components/Home';
+import FoodList from './Components/List';
+import RandomFood from './Components/RandomFood';
 import ReactGA from 'react-ga';
-ReactGA.initialize('UA-139556221-2');
+ReactGA.initialize(process.env.GOOGLE_KEY);
 ReactGA.pageview('/Home');
 
 class App extends Component {
@@ -11,7 +12,8 @@ class App extends Component {
     return (
       <Router>
       <div className="container">
-         <Route exact path="/" component={Home} />
+         <Route exact path="/" component={RandomFood} />
+         <Route exact path="/List" component={FoodList} />
       </div>
       </Router>
     );

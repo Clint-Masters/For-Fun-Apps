@@ -1,6 +1,14 @@
 import React, { Component } from "react";
-import { getLocation, getPrice, getDistance, getTerm } from "./functions";
-class Home extends Component {
+import Header from "./Header";
+import {
+  getLocation,
+  getPrice,
+  getDistance,
+  getTerm,
+  getOpenNow,
+  getNumberPossible
+} from "./functions";
+class FoodList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -8,12 +16,16 @@ class Home extends Component {
       term: "",
       location: "",
       price: "",
-      distance: ""
+      distance: "",
+      openNow: false,
+      numPossible: ""
     };
     this.handleChangeTerm = this.handleChangeTerm.bind(this);
     this.handleChangeLocation = this.handleChangeLocation.bind(this);
     this.handleChangePrice = this.handleChangePrice.bind(this);
     this.handleChangeDistance = this.handleChangeDistance.bind(this);
+    this.handleChangeOpenNow = this.handleChangeOpenNow.bind(this);
+    this.handleChangeNumPossible = this.handleChangeNumPossible.bind(this);
   }
 
   handleChangeTerm(event) {
@@ -32,11 +44,21 @@ class Home extends Component {
     this.setState({ price: event.target.value });
   }
 
+  handleChangeOpenNow(event) {
+    this.setState({ openNow: event.target.checked });
+  }
+
+  handleChangeNumPossible(event) {
+    this.setState({ numPossible: event.target.value});
+  }
+
   getFood = () => {
     var params = {
       price: this.state.price,
       distance: this.state.distance,
-      term: this.state.term
+      term: this.state.term,
+      openNow: this.state.openNow,
+      numPossible: this.state.numPossible
     };
     if (params.price === "") {
       params.price = "Inconceivable";
@@ -47,6 +69,12 @@ class Home extends Component {
     if (params.term === "") {
       params.term = "Inconceivable";
     }
+    if (params.numPossible === "") {
+        params.numPossible = "Inconceivable";
+    }
+    if (params.openNow === false) {
+        params.openNow = "Inconceivable";
+    }
     fetch(
       "/api/findFood/" +
         this.state.location +
@@ -55,7 +83,11 @@ class Home extends Component {
         "/" +
         params.distance +
         "/" +
-        params.price
+        params.price +
+        "/" +
+        params.numPossible +
+        "/" +
+        params.openNow
     )
       .then(res => res.json())
       .then(body =>
@@ -70,19 +102,17 @@ class Home extends Component {
 
     return (
       <div className="App">
+      <Header />
+      <h3>Enter Criteria And Find Food Near You</h3>
         <div className="rightCol">
-          <div>
+          <div className="searchBox">
             <h1>Search</h1>
-            Term: &nbsp; {getTerm(this.state, this.handleChangeTerm)}
-            <br />
-            Location: &nbsp;{" "}
+            {getTerm(this.state, this.handleChangeTerm)}
             {getLocation(this.state, this.handleChangeLocation)}
-            <br />
-            Price: &nbsp; {getPrice(this.state, this.handleChangePrice)}
-            <br />
-            Distance: &nbsp;{" "}
-            {getDistance(this.state, this.handleChangedistance)}
-            <br />
+            {getPrice(this.state, this.handleChangePrice)}
+            {getDistance(this.state, this.handleChangeDistance)}
+            {getOpenNow(this.state, this.handleChangeOpenNow)}
+            {getNumberPossible(this.state,this.handleChangeNumPossible)}
             <button className="more" onClick={this.getFood}>
               Get Food
             </button>
@@ -108,4 +138,4 @@ class Home extends Component {
     );
   }
 }
-export default Home;
+export default FoodList;
