@@ -1,7 +1,6 @@
 .App {
   text-align: center;
   font-family: "Courier New", monospace;
-  width: 100%;
 }
 
 h1 {
@@ -9,7 +8,7 @@ h1 {
   font-size: 42px;
 }
 
-.passwords {
+.businesses {
   list-style: none;
   padding: 0;
   font-size: 32px;
@@ -22,10 +21,29 @@ h1 {
   border: 2px solid #000;
   background-color: #fff;
   padding: 10px 25px;
+  margin-bottom: 50px;
 }
 .more:hover {
-  background-color: #FDD836;
+  background-color: lightblue;
 }
 .more:active {
-  background-color: #FFEFA9;
+  background-color: lightcoral;
 }
+
+.leftCol {
+  float:left;
+  width: 50%;
+}
+
+.rightCol{
+  float:left;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 50%;
+}
+
+.rightCol > input, select {
+  margin: 15px;
+}
+
