@@ -68,9 +68,6 @@ class Home extends Component {
           ) : (
             <div>
               <h1>No Businesses :(</h1>
-              <button className="more" onClick={this.getFood}>
-                Try Again?
-              </button>
             </div>
           )}
         </div>
@@ -85,6 +82,9 @@ class Home extends Component {
             <br />
             Distance: &nbsp; {getDistance(this.state, this.handleChangedistance)}
             <br />
+            <button className="more" onClick={this.getFood}>
+                Get Food
+              </button>
           </div>
         </div>
       </div>
