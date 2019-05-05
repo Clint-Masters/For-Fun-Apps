@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   font-family: "Courier New", monospace;
+  width: 100%;
 }
 
 h1 {
@@ -44,6 +45,7 @@ h1 {
 }
 
 .rightCol > input, select {
+  float: right;
   margin: 15px;
 }
 

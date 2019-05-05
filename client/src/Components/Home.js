@@ -70,25 +70,6 @@ class Home extends Component {
 
     return (
       <div className="App">
-        <div className="leftCol">
-          {businesses.length ? (
-            <div>
-              <h1>Businesses</h1>
-              <ul className="businesses">
-                {businesses.map((business, index) => (
-                  <li key={business.id}>{business.name}</li>
-                ))}
-              </ul>
-              <button className="more" onClick={this.getFood}>
-                Get Food
-              </button>
-            </div>
-          ) : (
-            <div>
-              <h1>No Businesses :(</h1>
-            </div>
-          )}
-        </div>
         <div className="rightCol">
           <div>
             <h1>Search</h1>
@@ -106,6 +87,22 @@ class Home extends Component {
               Get Food
             </button>
           </div>
+        </div>
+        <div className="leftCol">
+          {businesses.length ? (
+            <div>
+              <h1>Businesses</h1>
+              <ul className="businesses">
+                {businesses.map((business, index) => (
+                  <li key={business.id}>{business.name}</li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div>
+              <h1>No Businesses :(</h1>
+            </div>
+          )}
         </div>
       </div>
     );
