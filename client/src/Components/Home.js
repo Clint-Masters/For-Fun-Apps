@@ -39,12 +39,14 @@ class Home extends Component {
     }
     fetch("/api/findFood/"+this.state.location+"/"
     +params.term+"/"+params.distance+"/"+params.price)
-      .then(res => res.json())
-      .then(body =>
+    .then(function(response) {
+        return response.json();
+      })
+      .then(function(body) {
         body.businesses
           ? this.setState({ businesses: body.businesses })
           : this.setState({ businesses: [] })
-      );
+      });
   };
 
   render() {
