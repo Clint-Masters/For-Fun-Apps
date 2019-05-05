@@ -26,7 +26,7 @@ app.get("/api/passwords", (req, res) => {
 
 app.get("/api/findFood/:location/:term/:distance/:price", (req, res) => {
   console.log(req.params);
-  var url = "https://api.yelp.com/v3/businesses/search?location="+req.params.location;
+  var url = "https://api.yelp.com/v3/businesses/search?location="+req.params.location+"&limit=10";
   if(req.params.term!=='Inconceivable'){
     url += "&term="+req.params.term;
   }
