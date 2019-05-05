@@ -40,6 +40,8 @@ class Home extends Component {
     fetch("/api/findFood/"+this.state.location+"/"
     +params.term+"/"+params.distance+"/"+params.price)
     .then(function(response) {
+        console.log(response);
+        console.log(response.text());
         return response.json();
       })
       .then(function(body) {
