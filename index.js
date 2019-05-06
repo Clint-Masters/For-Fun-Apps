@@ -38,6 +38,8 @@ app.get("/api/findFood/:location/:term/:distance/:price/:numPossible/:openNow", 
   }
   if(req.params.numPossible!=='Inconceivable'){
     url += "&limit="+parseInt(req.params.numPossible);
+  } else {
+    url += "&limit=10";
   }
   if(req.params.openNow!=='Inconceivable'){
     url += "&open_now="+req.params.openNow;
