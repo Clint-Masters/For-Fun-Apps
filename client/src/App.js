@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import FoodList from './Components/List';
-import RandomFood from './Components/RandomFood';
-import ReactGA from 'react-ga';
+import React, { Component } from "react";
+import "./App.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import FoodList from "./Components/List";
+import RandomFood from "./Components/RandomFood";
+import ReactGA from "react-ga";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 ReactGA.initialize(process.env.GOOGLE_KEY);
-ReactGA.pageview('/Home');
+ReactGA.pageview("/Home");
 
 class App extends Component {
   render() {
     return (
       <Router>
-      <div className="container">
-         <Route exact path="/" component={RandomFood} />
-         <Route exact path="/List" component={FoodList} />
-      </div>
+        <div className="container">
+          <ToastContainer />
+          <Route exact path="/" component={RandomFood} />
+          <Route exact path="/List" component={FoodList} />
+        </div>
       </Router>
     );
   }

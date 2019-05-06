@@ -9,7 +9,7 @@ export function getLocation(props, handleChange) {
         placeholder="ex: Waco, 76706"
         value={props.location}
         onChange={handleChange}
-      />
+      />*
     </p>
   );
 }

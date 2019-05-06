@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Header";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   getLocation,
   getPrice,
@@ -49,52 +51,58 @@ class FoodList extends Component {
   }
 
   handleChangeNumPossible(event) {
-    this.setState({ numPossible: event.target.value});
+    this.setState({ numPossible: event.target.value });
   }
 
   getFood = () => {
-    var params = {
-      price: this.state.price,
-      distance: this.state.distance,
-      term: this.state.term,
-      openNow: this.state.openNow,
-      numPossible: this.state.numPossible
-    };
-    if (params.price === "") {
-      params.price = "Inconceivable";
-    }
-    if (params.distance === "") {
-      params.distance = "Inconceivable";
-    }
-    if (params.term === "") {
-      params.term = "Inconceivable";
-    }
-    if (params.numPossible === "") {
+    if (this.state.location === "") {
+      toast.error("Location is required");
+    } else {
+      var params = {
+        price: this.state.price,
+        distance: this.state.distance,
+        term: this.state.term,
+        openNow: this.state.openNow,
+        numPossible: this.state.numPossible
+      };
+      if (params.price === "") {
+        params.price = "Inconceivable";
+      }
+      if (params.distance === "") {
+        params.distance = "Inconceivable";
+      }
+      if (params.term === "") {
+        params.term = "Inconceivable";
+      }
+      if (params.numPossible === "") {
         params.numPossible = "Inconceivable";
-    }
-    if (params.openNow === false) {
+      }
+      if (params.openNow === false) {
         params.openNow = "Inconceivable";
+      }
+
+      fetch(
+        "/api/findFood/" +
+          this.state.location +
+          "/" +
+          params.term +
+          "/" +
+          params.distance +
+          "/" +
+          params.price +
+          "/" +
+          params.numPossible +
+          "/" +
+          params.openNow
+      )
+        .then(res => res.json())
+        .then(body => {
+          toast.success("Success");
+          body.businesses
+            ? this.setState({ businesses: body.businesses, food: "" })
+            : this.setState({ businesses: [], food: "" });
+        });
     }
-    fetch(
-      "/api/findFood/" +
-        this.state.location +
-        "/" +
-        params.term +
-        "/" +
-        params.distance +
-        "/" +
-        params.price +
-        "/" +
-        params.numPossible +
-        "/" +
-        params.openNow
-    )
-      .then(res => res.json())
-      .then(body =>
-        body.businesses
-          ? this.setState({ businesses: body.businesses })
-          : this.setState({ businesses: [] })
-      );
   };
 
   render() {
@@ -102,17 +110,17 @@ class FoodList extends Component {
 
     return (
       <div className="App">
-      <Header />
-      <h3>Enter Criteria And Find Food Near You</h3>
+        <Header />
+        <h3>Enter Criteria And Find Food Near You</h3>
         <div className="rightCol">
           <div className="searchBox">
             <h1>Search</h1>
-            {getTerm(this.state, this.handleChangeTerm)}
             {getLocation(this.state, this.handleChangeLocation)}
+            {getTerm(this.state, this.handleChangeTerm)}
             {getPrice(this.state, this.handleChangePrice)}
             {getDistance(this.state, this.handleChangeDistance)}
             {getOpenNow(this.state, this.handleChangeOpenNow)}
-            {getNumberPossible(this.state,this.handleChangeNumPossible)}
+            {getNumberPossible(this.state, this.handleChangeNumPossible)}
             <button className="more" onClick={this.getFood}>
               Get Food
             </button>
