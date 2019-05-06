@@ -143,6 +143,7 @@ class RandomFood extends Component {
             <div>
               <h1>You Will Be Eating At:</h1>
               {getRandomPlace(this.state, this.handleChangeRandom)}
+              
               <button className="more" onClick={this.tryAgain}>
                 Pick Again?
               </button>

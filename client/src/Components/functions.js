@@ -102,11 +102,11 @@ export function getRandomPlace(props) {
     for (var i = 0; i < props.businesses.length; i++) {
       if (i === place) {
         props.food = props.businesses[i].name;
-        return <span className="businesses">{props.businesses[i].name}</span>;
+        return <p><span className="businesses">{props.businesses[i].name}</span></p>;
       }
     }
   } else {
-    return <span className="businesses">{props.food}</span>;
+    return <p><span className="businesses">{props.food}</span></p>;
   }
-  return <span />;
+  return <p><span /></p>;
 }
