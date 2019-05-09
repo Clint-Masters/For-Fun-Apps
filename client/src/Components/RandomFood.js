@@ -200,12 +200,13 @@ class RandomFood extends Component {
           <div className="searchBox">
             <h1>Search</h1>
             {getLocation(this.state, this.handleChangeLocation)}
+            {getCurrentLocation(this.state, this.handleChangeCurrentLocation)}
             {getTerm(this.state, this.handleChangeTerm)}
             {getPrice(this.state, this.handleChangePrice)}
             {getDistance(this.state, this.handleChangeDistance)}
             {getOpenNow(this.state, this.handleChangeOpenNow)}
             {getNumberPossible(this.state, this.handleChangeNumPossible)}
-            {getCurrentLocation(this.state, this.handleChangeCurrentLocation)}
+            
             <button className="more" onClick={this.getFood}>
               Get Food
             </button>
