@@ -4,12 +4,13 @@ export function getLocation(props, handleChange) {
     <p>
       <label htmlFor="location">Location: </label>
       <input
+      disabled={props.currentLocation}
         id="location"
         type="text"
         placeholder="ex: Waco, 76706"
         value={props.location}
         onChange={handleChange}
-      />*
+      />{!props.currentLocation ? "*" : ""}
     </p>
   );
 }
@@ -102,11 +103,21 @@ export function getRandomPlace(props) {
     for (var i = 0; i < props.businesses.length; i++) {
       if (i === place) {
         props.food = props.businesses[i].name;
-        return <p><span className="businesses">{props.businesses[i].name}</span></p>;
+        props.foodUrl = props.businesses[i].url;
+        return <p><span className="businesses"><a href={props.businesses[i].url}>{props.businesses[i].name}</a></span></p>;
       }
     }
   } else {
-    return <p><span className="businesses">{props.food}</span></p>;
+    return <p><span className="businesses"><a href={props.foodUrl}>{props.food}</a></span></p>;
   }
   return <p><span /></p>;
+}
+
+export function getCurrentLocation(props, handleChange){
+  return <p>
+    <label htmlFor="currentLocation">Use Current Location: </label>
+    <span className={props.currentLocation ? "checkbox clicked" : "checkbox"} onClick={handleChange}>
+  <span className={props.currentLocation ? "checkmark draw":""}></span>
+</span>
+  </p>;
 }

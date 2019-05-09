@@ -140,3 +140,82 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+$brand-success: #5cb85c;
+$loader-size: 1em;
+$check-height: $loader-size/2;
+$check-width: $check-height/2;
+$check-left: ($loader-size/6 + $loader-size/12);
+$check-thickness: 3px;
+$check-color: $brand-success;
+
+.checkbox {
+  margin-bottom: $loader-size/2;
+  border: 5px solid rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: $loader-size;
+  height: $loader-size;
+}
+
+.clicked {
+  -webkit-animation: none;
+  animation: none;
+  border-color: $check-color;
+  transition: border 500ms ease-out;
+}
+
+.checkmark {
+  
+  &.draw:after {
+    animation-duration: 800ms;
+    animation-timing-function: ease;
+    animation-name: checkmark;
+    transform: scaleX(-1) rotate(135deg);
+  }
+  
+  &:after {
+    opacity: 1;
+    height: $check-height;
+    width: $check-width;
+    transform-origin: left top;
+    border-right: $check-thickness solid $check-color;
+    border-top: $check-thickness solid $check-color;
+    content: '';
+    left: $check-left;
+    top: $check-height;
+    position: absolute;
+  }
+}
+
+
+
+@keyframes checkmark {
+  0% {
+    height: 0;
+    width: 0;
+    opacity: 1;
+  }
+  20% {
+    height: 0;
+    width: $check-width;
+    opacity: 1;
+  }
+  40% {
+    height: $check-height;
+    width: $check-width;
+    opacity: 1;
+  }
+  100% {
+    height: $check-height;
+    width: $check-width;
+    opacity: 1;
+  }
+}
+
+a {
+  color: black;
+  font-family: "Courier New", monospace;
+  text-decoration: none;
+}

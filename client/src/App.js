@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./App.scss";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import FoodList from "./Components/List";
 import RandomFood from "./Components/RandomFood";
@@ -15,8 +15,8 @@ class App extends Component {
       <Router>
         <div className="container">
           <ToastContainer />
-          <Route exact path="/" component={RandomFood} />
-          <Route exact path="/List" component={FoodList} />
+          <Route exact path="/" render={(props) => <RandomFood {...props} random={true}/>} />
+          <Route exact path="/List" render={(props) => <RandomFood {...props} random={false}/>} />
         </div>
       </Router>
     );

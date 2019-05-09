@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Header from "./Header";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
+
 import {
   getLocation,
   getPrice,
@@ -9,7 +11,8 @@ import {
   getTerm,
   getOpenNow,
   getRandomPlace,
-  getNumberPossible
+  getNumberPossible,
+  getCurrentLocation
 } from "./functions";
 class RandomFood extends Component {
   constructor(props) {
@@ -22,7 +25,11 @@ class RandomFood extends Component {
       distance: "",
       openNow: false,
       numPossible: "",
-      food: ""
+      currentLocation: false,
+      latitude: "",
+      longitude: "",
+      food: "",
+      foodUrl: ""
     };
     this.handleChangeTerm = this.handleChangeTerm.bind(this);
     this.handleChangeLocation = this.handleChangeLocation.bind(this);
@@ -31,6 +38,10 @@ class RandomFood extends Component {
     this.handleChangeOpenNow = this.handleChangeOpenNow.bind(this);
     this.handleChangeNumPossible = this.handleChangeNumPossible.bind(this);
     this.handleChangeRandom = this.handleChangeRandom.bind(this);
+    this.handleChangeCurrentLocation = this.handleChangeCurrentLocation.bind(
+      this
+    );
+    this.handleSuccessPosition = this.handleSuccessPosition.bind(this);
   }
 
   handleChangeTerm(event) {
@@ -57,6 +68,52 @@ class RandomFood extends Component {
     this.setState({ numPossible: event.target.value });
   }
 
+  handleChangeCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        this.handleSuccessPosition,
+        this.handleErrorPosition
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+  handleSuccessPosition(position) {
+    if (this.state.currentLocation) {
+      this.setState({
+        currentLocation: !this.state.currentLocation,
+        latitude: "",
+        longitude: ""
+      });
+    } else {
+      this.setState({
+        currentLocation: !this.state.currentLocation,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
+    }
+  }
+
+  handleErrorPosition(error) {
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        alert("User denied the request for Geolocation.");
+        break;
+      case error.POSITION_UNAVAILABLE:
+        alert("Location information is unavailable.");
+        break;
+      case error.TIMEOUT:
+        alert("The request to get user location timed out.");
+        break;
+      case error.UNKNOWN_ERROR:
+        alert("An unknown error occurred.");
+        break;
+      default:
+        alert("Unknown error occurred.");
+    }
+  }
+
   handleChangeRandom(place) {
     this.setState({ food: place });
   }
@@ -66,15 +123,18 @@ class RandomFood extends Component {
   };
 
   getFood = () => {
-    if (this.state.location === "") {
-      toast.error("Location is required");
+    if (this.state.location === "" && this.state.latitude === "") {
+      toast.error("Location is required if not using current location");
     } else {
       var params = {
         price: this.state.price,
         distance: this.state.distance,
         term: this.state.term,
         openNow: this.state.openNow,
-        numPossible: this.state.numPossible
+        numPossible: this.state.numPossible,
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        location: this.state.location
       };
       if (params.price === "") {
         params.price = "Inconceivable";
@@ -88,13 +148,22 @@ class RandomFood extends Component {
       if (params.numPossible === "") {
         params.numPossible = "Inconceivable";
       }
+      if (params.latitude === "") {
+        params.latitude = "Inconceivable";
+      }
+      if (params.longitude === "") {
+        params.longitude = "Inconceivable";
+      }
       if (params.openNow === false) {
         params.openNow = "Inconceivable";
+      }
+      if (params.location === "") {
+        params.location = "Inconceivable";
       }
 
       fetch(
         "/api/findFood/" +
-          this.state.location +
+          params.location +
           "/" +
           params.term +
           "/" +
@@ -104,16 +173,19 @@ class RandomFood extends Component {
           "/" +
           params.numPossible +
           "/" +
-          params.openNow
+          params.openNow +
+          "/" +
+          params.latitude +
+          "/" +
+          params.longitude
       )
         .then(res => res.json())
         .then(body => {
-            toast.success("Success");
+          toast.success("Success");
           body.businesses
             ? this.setState({ businesses: body.businesses, food: "" })
             : this.setState({ businesses: [], food: "" });
-        }
-        );
+        });
     }
   };
 
@@ -133,6 +205,7 @@ class RandomFood extends Component {
             {getDistance(this.state, this.handleChangeDistance)}
             {getOpenNow(this.state, this.handleChangeOpenNow)}
             {getNumberPossible(this.state, this.handleChangeNumPossible)}
+            {getCurrentLocation(this.state, this.handleChangeCurrentLocation)}
             <button className="more" onClick={this.getFood}>
               Get Food
             </button>
@@ -141,12 +214,30 @@ class RandomFood extends Component {
         <div className="leftCol">
           {businesses.length ? (
             <div>
-              <h1>You Will Be Eating At:</h1>
-              {getRandomPlace(this.state, this.handleChangeRandom)}
-              
-              <button className="more" onClick={this.tryAgain}>
-                Pick Again?
-              </button>
+              {this.props.random ? (
+                <div>
+                  <h1>You Will Be Eating At:</h1>
+                  <h5>(Click the name to go to restaurant's yelp page)</h5>
+                  {getRandomPlace(this.state, this.handleChangeRandom)}
+
+                  <button className="more" onClick={this.tryAgain}>
+                    Pick Again?
+                  </button>
+                </div>
+              ) : (
+                <div>
+                    
+                  <h1>Businesses</h1>
+                  <h5>(Click the name to go to restaurant's yelp page)</h5>
+                  <ul className="businesses">
+                    {businesses.map((business, index) => (
+                      <li key={business.id}>
+                        <a href={business.url}>{business.name}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ) : (
             <div>

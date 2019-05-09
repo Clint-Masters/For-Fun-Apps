@@ -24,9 +24,15 @@ app.get("/api/passwords", (req, res) => {
   console.log(`Sent ${count} passwords`);
 });
 
-app.get("/api/findFood/:location/:term/:distance/:price/:numPossible/:openNow", (req, res) => {
+app.get("/api/findFood/:location/:term/:distance/:price/:numPossible/:openNow/:latitude/:longitude", (req, res) => {
   console.log(req.params);
-  var url = "https://api.yelp.com/v3/businesses/search?location="+req.params.location;
+  var url = "https://api.yelp.com/v3/businesses/search?";
+  if(req.params.latitude==="Inconceivable"){
+    url+="location="+req.params.location;
+  }
+  else {
+    url += "latitude="+parseFloat(req.params.latitude)+"&longitude="+parseFloat(req.params.longitude);
+  }
   if(req.params.term!=='Inconceivable'){
     url += "&term="+req.params.term;
   }
