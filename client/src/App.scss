@@ -18,7 +18,10 @@ h2 {
   
 }
 
+
 .businesses {
+  text-decoration: underline;
+  color: blue;
   list-style: none;
   padding: 0;
   font-size: 32px;
@@ -222,7 +225,7 @@ $check-color: $brand-success;
 }
 
 a {
-  color: black;
+  color: #8585ad;
   font-family: "Courier New", monospace;
   text-decoration: none;
 }
